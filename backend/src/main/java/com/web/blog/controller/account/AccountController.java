@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.swagger.annotations.ApiResponse;
@@ -30,8 +33,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.FileReader;
 import java.io.StringWriter;
- 
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 
 import javax.script.ScriptContext;
@@ -54,33 +58,32 @@ public class AccountController {
     @Autowired
     JwtService jwtService;
 
-
     // @GetMapping("/account/login")
     // @ApiOperation(value = "로그인")
     // public Object login(@RequestParam(required = true) final String email,
-    //         @RequestParam(required = true) final String password) {
+    // @RequestParam(required = true) final String password) {
 
-    //     Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
+    // Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
-    //     ResponseEntity response = null;
+    // ResponseEntity response = null;
 
-    //     if (userOpt.isPresent()) {
-    //         final BasicResponse result = new BasicResponse();
-    //         result.status = true;
-    //         result.data = "success";
-    //         response = new ResponseEntity<>(result, HttpStatus.OK);
-    //     } else {
-    //         response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    //     }
+    // if (userOpt.isPresent()) {
+    // final BasicResponse result = new BasicResponse();
+    // result.status = true;
+    // result.data = "success";
+    // response = new ResponseEntity<>(result, HttpStatus.OK);
+    // } else {
+    // response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    // }
 
-    //     return response;
+    // return response;
     // }
 
     @PostMapping("/account/kakaologin")
     @ApiOperation(value = "카카오 로그인")
     public Object viewInfo(@RequestBody User request) throws SQLException, IOException {
         String token = null;
-      
+
         try {
             Optional<User> userOpt = userDao.findUserByUid(request.getUid());
             if (userOpt.isPresent()) {
@@ -90,21 +93,16 @@ public class AccountController {
                 token = jwtService.createLoginToken(tokenuser);
 
                 return new ResponseEntity<>(token, HttpStatus.ACCEPTED);
-            }else{
+            } else {
                 System.out.println("2번째");
                 return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
             }
-           
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
-
-
-
-
 
     @PostMapping("/account/signup")
     @ApiOperation(value = "가입하기")
@@ -113,19 +111,17 @@ public class AccountController {
         String token = null;
         System.out.println("logger - signup method");
         // 이메일, 닉네임 중복처리 필수
-        
+
         System.out.println(request.getEmail());
         User user = userDao.getUserByEmail(request.getEmail());
-        
-        
-        if(user!=null){
+
+        if (user != null) {
             System.out.println("logger - 해당 이메일이 이미 있음 ");
-            
-            
-        } else{
-            //회원가입 
+
+        } else {
+            // 회원가입
             System.out.println("logger - 회원가입 진행");
-            
+
             userDao.save(request);
             User tokenuser = new User();
             tokenuser.setUid(request.getUid());
@@ -134,7 +130,7 @@ public class AccountController {
             return new ResponseEntity<>(token, HttpStatus.ACCEPTED);
 
         }
-        //회원가입단을 생성해 보세요.
+        // 회원가입단을 생성해 보세요.
 
         final BasicResponse result = new BasicResponse();
         result.status = true;
@@ -143,12 +139,11 @@ public class AccountController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
     @GetMapping("/authuser/{token}")
     @ApiOperation(value = "토큰으로 유저정보 가져오기")
     public Object authUser(@PathVariable String token) throws SQLException, IOException {
         User tokenuser = jwtService.getUser(token);
-      
+
         Optional<User> userinfo = userDao.findUserByUid(tokenuser.getUid());
         try {
             if (userinfo.isPresent()) {
@@ -162,61 +157,58 @@ public class AccountController {
     }
 
     @GetMapping("/test")
-    @ApiOperation(value = "토큰으로 유저정보 가져오기")
-    public Object test() throws IOException{
-        // ProcessBuilder pb = new ProcessBuilder("python", "C:/Users/multicampus/Desktop/project/pjt3/face_recognition/examples/blur_faces_on_webcam.py");
-        ProcessBuilder pb = new ProcessBuilder("python", "./test.py");
-        // , "0", "-d", "-S", "0.1", "-c", "woong");
-        Process p = pb.start();
-        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "utf-8"));
-        String line = "";
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-        System.out.println("한글");
-        // try {
-        //     String line = "";
-        //     while ((line = br.readLine()) != null) {
-        //         System.out.println(line);
-        //     }
-        // } finally {
-        //     try {
-        //         if (br != null) {
-        //             br.close();
-        //         }
-        //     } catch (Exception e) {
-        //         e.printStackTrace();
-        //     }
-        // }
+    public ResponseEntity<?> test() throws Exception {
+        ResponseEntity<?> response = null;
+        BasicResponse result = new BasicResponse();
+        System.out.println("hi");
 
-        final BasicResponse result = new BasicResponse();
-        result.status = true;
-        result.data = "success";
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        System.out.println("Python Call");
+        String[] command = new String[8];
+        command[0] = "python";
+        command[1] = "C:\\Users\\multicampus\\Desktop\\lastpjt\\s03p31b107\\face_classifier\\face_classifier.py";
+        command[2] = "0";
+        command[3] = "-d";
+        command[4] = "-S";
+        command[5] = "0.1";
+        command[6] = "-c";
+        command[7] = "rim";
+        // command[1] = "C:\\Users\\multicampus\\Desktop\\lastpjt\\s03p31b107\\face_classifier\\face_recognition_knn.py";
+
+
+        try {
+            ByteArrayOutputStream out = execPython(command);
+            // System.out.println("+++++++++++++++++"+ out.toString());
+            String extact_result = out.toString();
+            StringBuffer res = new StringBuffer();
+            for (int i = 0; i < extact_result.length(); i++) {
+                char c = extact_result.charAt(i);
+                if (c == '\n' || c == '\r') {
+                    break;
+                } else if (c != ' ') {
+                    res.append(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
+
     }
 
-    // @PutMapping("/modify/{pwvalidated}")
-    // @ApiOperation(value = "회원정보수정")
-    // public Object modify(@Valid @RequestBody User request)
-    //         throws SQLException, IOException {
-    //     try {
-    //         Optional<User> userOpt = userDao.findUserByUid(request.getUid());
-    //         if (userOpt.isPresent()) {
-    //             User newUser = userOpt.get();
-    //             // if (pwvalidated == 1) {
-    //             //     newUser.setPassword(request.getPassword());
-    //             // } else {
-    //             //     newUser.setNickname(request.getNickname());
-    //             //     // newUser.setImgurl(request.getImgurl());
-    //             // }
-    //             userDao.save(newUser);
-    //             return newUser;
-    //         } else {
-    //             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    //         }
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    public static ByteArrayOutputStream execPython(String[] command) throws IOException, InterruptedException {
+        CommandLine commandLine = CommandLine.parse(command[0]);
+        for (int i = 1, n = command.length; i < n; i++) {
+            commandLine.addArgument(command[i]);
+        }
 
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setStreamHandler(pumpStreamHandler);
+        executor.setExitValue(0); 
+        int result = executor.execute(commandLine);
+        System.out.println("result: " + result);
+        System.out.println("output: " + outputStream.toString());
+        return outputStream;
+    }
 }

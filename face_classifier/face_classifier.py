@@ -75,7 +75,7 @@ class FaceClassifier():
             aligned_image = face_alignment_dlib.get_aligned_face(self.predictor, face_image)
 
             filename = now.strftime('%Y%m%d_%H%M%S.%f')[:-3] + '.png'
-            pathname = os.path.join("knn_examples/train/" + args.capture, filename)
+            pathname = os.path.join("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture, filename)
             tmp += 1
             cv2.imwrite(pathname, aligned_image)
         return faces
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     import time
     import os
 
+    print("aa")
     ap = argparse.ArgumentParser()
     ap.add_argument("inputfile",
                     help="video file to detect or '0' to detect from web cam")
@@ -126,8 +127,8 @@ if __name__ == '__main__':
 
     num_capture = 0
     if args.capture:
-        if not os.path.isdir("knn_examples/train/" + args.capture):
-            os.mkdir("knn_examples/train/" + args.capture)
+        if not os.path.isdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture):
+            os.mkdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture)
 
 
     # set SIGINT (^C) handler
@@ -165,7 +166,9 @@ if __name__ == '__main__':
             running = False
 
         if args.display or args.capture:
+            print("1")
             if args.capture and len(faces) > 0:
+                print("2")
                 num_capture += 1
             if args.display:
                 cv2.imshow("Frame", frame)
@@ -182,3 +185,4 @@ if __name__ == '__main__':
     running = False
     src.release()
     total_elapsed_time = time.time() - total_start_time
+    print(total_elapsed_time)
