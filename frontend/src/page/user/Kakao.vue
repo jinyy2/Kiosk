@@ -11,10 +11,10 @@
 
 <script>
 import axios from "axios";
-import constants from '../lib/constants';
+import constants from '../../lib/constants';
 
 
-const baseURL = constants.baseURL;
+const baseURL = constants.baseUrl;
 
 export default {
   name: "Kakao",
@@ -84,7 +84,6 @@ export default {
           alert(JSON.stringify(error));
         },
       });
-      //]]>
       setTimeout(() => {
         console.log(a);
       }, 5);

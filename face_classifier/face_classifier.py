@@ -75,7 +75,7 @@ class FaceClassifier():
             aligned_image = face_alignment_dlib.get_aligned_face(self.predictor, face_image)
 
             filename = now.strftime('%Y%m%d_%H%M%S.%f')[:-3] + '.png'
-            pathname = os.path.join("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture, filename)
+            pathname = os.path.join(base_path + "knn_examples/train/" + args.capture, filename)
             tmp += 1
             cv2.imwrite(pathname, aligned_image)
         return faces
@@ -87,7 +87,6 @@ if __name__ == '__main__':
     import time
     import os
 
-    print("aa")
     ap = argparse.ArgumentParser()
     ap.add_argument("inputfile",
                     help="video file to detect or '0' to detect from web cam")
@@ -106,6 +105,8 @@ if __name__ == '__main__':
     ap.add_argument("-r", "--resize-ratio", default=1.0, type=str,
                     help="resize the frame to process (less time, less accuracy)")
     args = ap.parse_args()
+
+    base_path = "C:/Users/multicampus/Desktop/project/pjt3/s03p31b107_3/face_classifier/"
 
     src_file = args.inputfile
     if src_file == "0":
@@ -127,8 +128,8 @@ if __name__ == '__main__':
 
     num_capture = 0
     if args.capture:
-        if not os.path.isdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture):
-            os.mkdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train/" + args.capture)
+        if not os.path.isdir(base_path + "knn_examples/train/" + args.capture):
+            os.mkdir(base_path + "knn_examples/train/" + args.capture)
 
 
     # set SIGINT (^C) handler
@@ -166,9 +167,7 @@ if __name__ == '__main__':
             running = False
 
         if args.display or args.capture:
-            print("1")
             if args.capture and len(faces) > 0:
-                print("2")
                 num_capture += 1
             if args.display:
                 cv2.imshow("Frame", frame)
