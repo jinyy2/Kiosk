@@ -161,18 +161,17 @@ public class AccountController {
         ResponseEntity<?> response = null;
         BasicResponse result = new BasicResponse();
         System.out.println("hi");
-
         System.out.println("Python Call");
         String[] command = new String[8];
         command[0] = "python";
-        command[1] = "C:\\Users\\multicampus\\Desktop\\lastpjt\\s03p31b107\\face_classifier\\face_classifier.py";
-        command[2] = "0";
-        command[3] = "-d";
-        command[4] = "-S";
-        command[5] = "0.1";
-        command[6] = "-c";
-        command[7] = "rim";
-        // command[1] = "C:\\Users\\multicampus\\Desktop\\lastpjt\\s03p31b107\\face_classifier\\face_recognition_knn.py";
+        // command[1] = "C:\\Users\\multicampus\\Desktop\\project\\pjt3\\s03p31b107_3\\face_classifier\\face_classifier.py";
+        // command[2] = "0";
+        // command[3] = "-d";
+        // command[4] = "-S";
+        // command[5] = "0.1";
+        // command[6] = "-c";
+        // command[7] = "test/woong";
+        command[1] = "C:\\Users\\multicampus\\Desktop\\project\\pjt3\\s03p31b107_3\\face_classifier\\face_recognition_knn.py";
 
 
         try {
@@ -205,7 +204,8 @@ public class AccountController {
         PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
         DefaultExecutor executor = new DefaultExecutor();
         executor.setStreamHandler(pumpStreamHandler);
-        executor.setExitValue(0); 
+        int[] ev = {0,1};
+        executor.setExitValues(ev); 
         int result = executor.execute(commandLine);
         System.out.println("result: " + result);
         System.out.println("output: " + outputStream.toString());
