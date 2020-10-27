@@ -32,6 +32,7 @@ $ pip3 install scikit-learn
 """
 
 import math
+from pickle import FALSE
 from sklearn import neighbors
 import os
 import os.path
@@ -74,8 +75,13 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
     """
     # X = []
     # y = []
+<<<<<<< HEAD
     X = loadtxt('C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/output2.csv', delimiter=',').tolist()
     y = loadtxt('C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/output3.csv', dtype=str).tolist()
+=======
+    X = loadtxt(base_path + "output2.csv", delimiter=',').tolist()
+    y = loadtxt(base_path + "output3.csv", dtype=str).tolist()
+>>>>>>> 86820ee01195305353fc89748218dd26abd12d69
 
     # Loop through each person in the training set
     for class_dir in os.listdir(train_dir):
@@ -94,8 +100,13 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
                 X.append(face_recognition.face_encodings(image, known_face_locations=face_bounding_boxes)[0])
                 y.append(class_dir)
 
+<<<<<<< HEAD
     shutil.rmtree("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train")
     os.mkdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train")
+=======
+    shutil.rmtree(base_path + "knn_examples/train")
+    os.mkdir(base_path + "knn_examples/train")
+>>>>>>> 86820ee01195305353fc89748218dd26abd12d69
     
     # Determine how many neighbors to use for weighting in the KNN classifier
     if n_neighbors is None:
@@ -105,8 +116,8 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
     d = np.array(y)
     pointY = d.reshape(d.shape[0], -1)
 
-    savetxt('output2.csv', pointX, delimiter=',')
-    savetxt('output3.csv', pointY, fmt='%s')
+    savetxt(base_path + "output2.csv", pointX, delimiter=',')
+    savetxt(base_path + "output3.csv", pointY, fmt='%s')
 
     knn_clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=knn_algo, weights='distance')
     knn_clf.fit(X, y)
@@ -162,19 +173,37 @@ def predict(X_img_path, knn_clf=None, model_path=None, distance_threshold=0.4):
 
 
 if __name__ == "__main__":
+    base_path = "C:/Users/multicampus/Desktop/project/pjt3/s03p31b107_3/face_classifier/"
+    flag = False
     # STEP 1: Train the KNN classifier and save it to disk
     # Once the model is trained and saved, you can skip this step next time.
+<<<<<<< HEAD
     classifier = train("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/train", model_save_path="trained_knn_model.csv", n_neighbors=1)
 
     # STEP 2: Using the trained classifier, make predictions for unknown images
     for image_file in os.listdir("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/test"):
         full_file_path = os.path.join("C:/Users/multicampus/Desktop/lastpjt/s03p31b107/face_classifier/knn_examples/test", image_file)
+=======
+    classifier = train(base_path + "knn_examples/train", model_save_path=base_path + "trained_knn_model.csv", n_neighbors=1)
+
+    # STEP 2: Using the trained classifier, make predictions for unknown images
+    for image_file in os.listdir(base_path + "knn_examples/test"):
+        full_file_path = os.path.join(base_path + "knn_examples/test", image_file)
+>>>>>>> 86820ee01195305353fc89748218dd26abd12d69
 
         # Find all people in the image using a trained classifier model
         # Note: You can pass in either a classifier file name or a classifier model instance
-        predictions = predict(full_file_path, model_path="trained_knn_model.csv")
+        predictions = predict(full_file_path, model_path=base_path + "trained_knn_model.csv")
 
         # Print results on the console
         for name, (top, right, bottom, left) in predictions:
-            print("- Found {} at ({}, {})".format(name, left, top))
+            print("{}".format(name))
+            if name != "unknown":
+                shutil.rmtree(base_path + "knn_examples/test")
+                os.mkdir(base_path + "knn_examples/test")
+                flag = True
+                break
+        if flag:
+            break
+
 
