@@ -14,10 +14,13 @@ import OrderList from '../components/User/OrderList.vue'
 // 어드민
 import Admin from '../page/user/Admin.vue'
 import DashBoard from '@/components/admin/DashBoard.vue'
+import UpdateMenu from '@/components/admin/UpdateMenu.vue'
+import VisitHistory from '@/components/admin/VisitHistory.vue'
 
 // 포스트
 import List from '../page/post/List.vue'
 import Main from '../page/post/Main.vue'
+import KioskMain from '../page/post/KioskMain.vue'
 
 Vue.use(Router) 
  
@@ -56,11 +59,11 @@ export default new Router({
       name: constants.URL_TYPE.POST.MAIN,
       component: Main,
     },
-    // { 
-    //   path: '/main',
-    //   name: constants.URL_TYPE.POST.MAIN,
-    //   component: Main,
-    // },
+    { 
+      path: '/kiosk/main',
+      name: constants.URL_TYPE.POST.KIOSKMAIN,
+      component: KioskMain,
+    },
     { // 마이페이지
       path: '/user/mypage',
       name: constants.URL_TYPE.USER.MYPAGE,
@@ -91,5 +94,16 @@ export default new Router({
       name: constants.URL_TYPE.ADMIN.DASHBOARD,
       component: DashBoard
     },
+    { // 어드민 메뉴
+      path: '/admin/updatemenu',
+      name: constants.URL_TYPE.ADMIN.UPDATEMENU,
+      component: UpdateMenu
+    },
+    { // 어드민 방문기록
+      path: '/admin/visithistory',
+      name: constants.URL_TYPE.ADMIN.VISITHISTORY,
+      component: VisitHistory
+    },
+
   ]
 })

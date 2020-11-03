@@ -53,9 +53,6 @@
 <script>
 import axios from "axios";
 import constants from "../../lib/constants";
-import "../../assets/css/header.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import KakaoVue from "../../page/user/Kakao.vue";
 
 const baseURL = constants.baseUrl;

@@ -75,8 +75,7 @@ class FaceClassifier():
             aligned_image = face_alignment_dlib.get_aligned_face(self.predictor, face_image)
 
             filename = now.strftime('%Y%m%d_%H%M%S.%f')[:-3] + '.png'
-            pathname = os.path.join("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture, filename)
-
+            pathname = os.path.join("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/test/" , filename)
             tmp += 1
             cv2.imwrite(pathname, aligned_image)
         return faces
@@ -87,7 +86,6 @@ if __name__ == '__main__':
     import signal
     import time
     import os
-
     ap = argparse.ArgumentParser()
     ap.add_argument("inputfile",
                     help="video file to detect or '0' to detect from web cam")
@@ -128,18 +126,18 @@ if __name__ == '__main__':
         s += " -> %dx%d" % (int(src.get(3) * ratio), int(src.get(4) * ratio))
 
     num_capture = 0
-    if args.capture:
-        if not os.path.isdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture):
-            os.mkdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture)
-
-
-
+    # if args.capture:
+    #     if not os.path.isdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/test/" + args.capture):
+    #         os.mkdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/test/" + args.capture)
+            
     # set SIGINT (^C) handler
     def signal_handler(sig, frame):
         global running
         running = False
-    prev_handler = signal.signal(signal.SIGINT, signal_handler)
 
+        
+    prev_handler = signal.signal(signal.SIGINT, signal_handler)
+    
     fc = FaceClassifier(args.threshold, ratio)
     frame_id = 0
     running = True
@@ -151,26 +149,26 @@ if __name__ == '__main__':
         if frame is None:
             break
 
-        frame_id += 1
-        if frame_id % frames_between_capture != 0:
-            continue
+        # frame_id += 1
 
-        seconds = round(frame_id / frame_rate, 3)
-        if args.stop > 0 and seconds > args.stop:
+        # if frame_id % frames_between_capture != 0:
+            # continue
+
+        # seconds = round(frame_id / frame_rate, 3)
+        if args.stop > 0:
             break
-        if seconds < args.skip:
-            continue
+        # if seconds < args.skip:
+        #     continue
 
         start_time = time.time()
 
         # this is core
         faces = fc.detect_faces(frame)
-        if tmp >= 20:
+        if tmp >= 5:
             running = False
 
         if args.display or args.capture:
             if args.capture and len(faces) > 0:
-
                 num_capture += 1
             if args.display:
                 cv2.imshow("Frame", frame)
@@ -185,5 +183,8 @@ if __name__ == '__main__':
     # restore SIGINT (^C) handler
     signal.signal(signal.SIGINT, prev_handler)
     running = False
+    cv2.destroyAllWindows()
     src.release()
     total_elapsed_time = time.time() - total_start_time
+
+

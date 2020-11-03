@@ -242,4 +242,6 @@ export default {
   background-color: #eee;
   cursor: pointer;
 }
+
+
 </style>

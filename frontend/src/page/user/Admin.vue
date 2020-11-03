@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <div>
     <b-button v-b-toggle.sidebar-no-header>Toggle Sidebar</b-button>
     <b-sidebar id="sidebar-no-header" aria-labelledby="sidebar-no-header-title" no-header shadow>
@@ -21,11 +21,37 @@
       </template>
     </b-sidebar>
   </div>
+</template> -->
+<template>
+  <!-- Default form login -->
+  <div class="container">
+  <form>
+    <p class="h4 text-center mb-4">Sign in</p>
+    <label for="defaultFormLoginEmailEx" class="grey-text">Your email</label>
+    <input type="email" id="defaultFormLoginEmailEx" class="form-control"/>
+    <br/>
+    <label for="defaultFormLoginPasswordEx" class="grey-text">Your password</label>
+    <input type="password" id="defaultFormLoginPasswordEx" class="form-control"/>
+    <div class="text-center mt-4">
+      <button class="btn btn-dark" type="submit">Login</button>
+    </div>
+  </form>
+  </div>
+  <!-- Default form login -->
 </template>
+
+
 <script>
 export default {
   name: "Admin",
 };
 </script>
 <style scoped>
+.container{
+  background-color: white;
+  width:700px;
+  margin:100px auto;
+  border: solid 1px black;
+  padding: 40px;
+}
 </style>
