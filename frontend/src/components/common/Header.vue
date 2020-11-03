@@ -1,6 +1,6 @@
 <template>
   <div v-if="isHeader">
-    <nav class="navbar navbar-expand navbar-light bg-white py-3 shadow-sm">
+    <nav class="navbar navbar-expand  py-3 shadow-sm">
       <div id="navbarContent" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
@@ -9,38 +9,34 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/list">
+            <router-link class="ml-5 nav-link" to="/list">
               <div class="nav-link font-weight-bold text-uppercase">KIOSK</div>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/mypage">
-              <div
-                class="nav-link font-weight-bold text-uppercase"
-                v-if="this.$cookies.isKey('Auth-Token')"
-              >
+          <li class="nav-item" v-if="this.$cookies.isKey('Auth-Token')">
+            <router-link class="ml-5 nav-link" to="/user/mypage">
+              <div class="nav-link font-weight-bold text-uppercase">
                 Account
               </div>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/">
+          <li class="nav-item" v-if="this.$cookies.isKey('Auth-Token')">
+            <router-link class="ml-5 nav-link" to="/">
               <div
                 class="nav-link font-weight-bold text-uppercase"
-                v-if="this.$cookies.isKey('Auth-Token')"
                 @click="logout"
               >
                 Logout
               </div>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/">
+          <li class="nav-item" v-if="!this.$cookies.isKey('Auth-Token')">
+            <router-link class="ml-5 nav-link" to="/">
               <div
-                
-                v-if="!this.$cookies.isKey('Auth-Token')"
+                class="nav-link font-weight-bold text-uppercase"
+                @click="kakaojoin"
               >
-                <KakaoVue />
+                Login
               </div>
             </router-link>
           </li>
@@ -53,9 +49,6 @@
 <script>
 import axios from "axios";
 import constants from "../../lib/constants";
-import "../../assets/css/header.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import KakaoVue from "../../page/user/Kakao.vue";
 
 const baseURL = constants.baseUrl;
@@ -147,8 +140,19 @@ export default {
 };
 </script>
 <style scoped>
+@import "https://fonts.googleapis.com/css?family=Montserrat|Open+Sans";
+* {
+  background-color: #003300;
+  color: #ffffff;
+}
+
 .navbar {
+  font-family: "Open Sans", sans-serif;
   height: 100px;
-  font-size: 30px;
+  font-size: 20px;
+}
+
+.nav-link:hover {
+  color: #ffcc00;
 }
 </style>

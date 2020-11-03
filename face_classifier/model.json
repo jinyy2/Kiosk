@@ -1,0 +1,1 @@
+{"classifier_file": "model.pkl", "params": {"activation": "identity", "hidden_layer_sizes": [128], "learning_rate": "constant", "solver": "adam"}}

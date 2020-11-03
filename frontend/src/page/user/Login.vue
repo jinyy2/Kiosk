@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import '../../assets/css/user.scss'
     import constants from '../../lib/constants'
     import Kakao from '../user/Kakao.vue'
     

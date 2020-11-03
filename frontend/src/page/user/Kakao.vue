@@ -1,6 +1,10 @@
 <template>
-  <div class="nav-link font-weight-bold text-uppercase" id="kakao-login-btn" @click="kakaojoin" v-if="!this.$cookies.isKey('Auth-Token')">
-   Login
+  <div
+    id="kakao-login-btn"
+    @click="kakaojoin"
+    v-if="!this.$cookies.isKey('Auth-Token')"
+  >
+    Login
   </div>
 </template>
 
@@ -71,3 +75,4 @@ export default {
   },
 };
 </script>
+

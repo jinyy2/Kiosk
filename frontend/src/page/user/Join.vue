@@ -1,7 +1,7 @@
 <template>
-  <div class="user" id="join">
+  <div class="user mt-5" id="join">
     <div class="container">
-      <h1 style="text-align: center">회원가입</h1>
+      <h4 style="text-align: center">회원가입</h4>
 
       <!-- 이름 -->
       <b-form-group
@@ -145,8 +145,6 @@
         >
         <b-col lg="4" class="pb-2"></b-col>
       </b-row>
-
-      <!-- <b-button type="reset" variant="danger">Reset</b-button> -->
     </div>
   </div>
 </template>

@@ -1,129 +1,108 @@
 <template>
-  <div class="overflow-auto">
-    <p class="mt-3">Current Page: {{ currentPage }}</p>
-    <b-table
-      id="my-table"
-      :items="items"
-      :per-page="perPage"
-      :current-page="currentPage"
-      small
-      hover
-    >
-      <template #cell(name)="data"> {{ data.item.name }} +III </template>
-      <!-- <template #cell(name)="data">
-        <b class="text-info">{{ data.sid }}</b>, <b>{{ data.value.name }}</b>
-      </template> -->
-      <template #cell(image)="data">
-        <!-- <v-img :src="data.item.image" alt="" contain height="100px" width="150px">
-        </v-img> -->
-        <img :src="data.item.image" />
-        <!-- {{ data.item.image }} +III -->
-      </template>
-    </b-table>
-
-    <!-- <b-pagination
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      aria-controls="my-table"
-    ></b-pagination> -->
-
-    <!-- <table>
-        <colgroup>
-            <col width="15%" />
-
-            <col width="10%" />
-
-            <col width="30%" />
-
-            <col width="40%" />
-
-            <col width="10%" />
-
-        </colgroup>
-        <thead>
-            <tr>
-                <td>지점번호</td>
-                <td>메뉴번호</td>
-                <td>메뉴이름</td>
-                <td>메뉴설명</td>
-                <td>메뉴가격</td>
-                <td>메뉴사진</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item,i) in items" :key=i>
-                <td>{{item.sid}}</td>
-                <td>{{item.menuid}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.description}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.image}}</td>
-            </tr>
-        </tbody>
-    </table> -->
-
-    <div class="mt-3">
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="rows"
-        align="center"
-      ></b-pagination>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="card text-center" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">오늘의 방문자 수</h5>
+            <p class="card-text" style="font-size:3em">
+              {{todayCount}}
+            </p>
+            <b-btn href="#" class="card-link" router-link :to="{name: 'visithisotry'}">방문기록 확인</b-btn>
+            <!-- <b-btn href="#" class="card-link">방문기록 확인</b-btn> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-sm">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
-import axios from "axios";
-import constants from "../../lib/constants";
+import axios from 'axios'
+import constants from '@/lib/constants'
 
 const baseURL = constants.baseUrl;
 
 export default {
   name: "DashBoard",
-  data() {
-    return {
-      perPage: 10,
-      currentPage: 1,
-      menuAll: {},
-      items: [
-        // { id: 1, first_name: "Fred", last_name: "Flintstone" },
-        // { id: 2, first_name: "Wilma", last_name: "Flintstone" },
-        // { id: 3, first_name: "Barney", last_name: "Rubble" },
-        // { id: 4, first_name: "Betty", last_name: "Rubble" },
-        // { id: 5, first_name: "Pebbles", last_name: "Flintstone" },
-        // { id: 6, first_name: "Bamm Bamm", last_name: "Rubble" },
-        // { id: 7, first_name: "The Great", last_name: "Gazzoo" },
-        // { id: 8, first_name: "Rockhead", last_name: "Slate" },
-        // { id: 9, first_name: "Pearl", last_name: "Slaghoople" },
-      ],
-    };
+  data(){
+    return{
+      todayCount:0,
+    }
   },
-  created() {
-    console.log("logger - Create DashBoard");
-    this.GetMenuInfo();
+  created(){
+    this.getTodayVisitor()
   },
-  computed: {
-    rows() {
-      return this.items.length;
-    },
-  },
-  methods: {
-    GetMenuInfo() {
+  methods:{
+    getTodayVisitor(){
       axios
-        .get(`${baseURL}/branch/menu`, { params: { sid: 1 } })
-        .then((res) => {
-          console.log(res);
-          this.items = res.data.object;
-          //   const menu = res.data.object;
-          //   this.menuAll = res.data.object;
-          //   this.menusCate1 = menu.filter((cate) => cate.category1 == 1);
-          //   this.menusCate2 = menu.filter((cate) => cate.category1 == 2);
-          //   console.log(this.menusCate1);
-        })
-        .catch((err) => console.log(err.response));
+      .get(`${baseURL}/admin/getvisitorcount`)
+      .then((res)=>{
+          this.todayCount=res.data
+        // console.log(res)
+        }
+      
+      )
+      .catch((err)=>{
+        console.log(err)
+      })
     },
   },
+
 };
 </script>
 <style scoped>
+.container {
+  background-color: white;
+  width: 1000;
+  margin: 60px auto;
+  padding: 50px;
+}
+.row{
+  margin-bottom: 50px;
+}
 </style>
