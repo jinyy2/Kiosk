@@ -1,8 +1,10 @@
 package com.web.blog.controller.orderlist;
 
+import com.web.blog.dao.branch.BranchDao;
 import com.web.blog.dao.orderlist.OrderlistDao;
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
+import com.web.blog.model.branch.Branch;
 import com.web.blog.model.orderlist.Orderlist;
 import com.web.blog.model.orderlist.OrderlistRequest;
 import com.web.blog.model.user.User;
@@ -38,15 +40,41 @@ public class OrderlistController {
     UserDao userDao;
 
     @Autowired
+    BranchDao BranchDao;
+
+    @Autowired
     OrderlistDao OrderlistDao;
 
     @GetMapping("/get/orderlist")
     @ApiOperation(value = "주문 메뉴 전체 목록")
     public Object getorderlist(@RequestParam(required = true) int uid, int sid) {
 
-        List<Orderlist> orderlistlist = OrderlistDao.findOrderlistByUidAndSid(uid, sid);
-        ResponseEntity<Object> response = null;
+        ArrayList<Orderlist> orderlistlist = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
+        System.out.println("///////////////////////////");
+        List<Branch> menulist = BranchDao.findBranchBySid(sid);
+        ArrayList<Object> ret = new ArrayList<>();
+        for (int i = 0; i < menulist.size(); i++) {
+            for (int j = 0; j < orderlistlist.size(); j++) {
+                if(menulist.get(i).getMenuid() == orderlistlist.get(j).getMenuid()){
+                    ret.add(menulist.get(i));
+                }
+            }
+        }
 
+        ResponseEntity<Object> response = null;
+        BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "주문 메뉴 전체 목록 조회 완료";
+        result.object = ret;
+        response = new ResponseEntity<>(result, HttpStatus.OK);
+        return response;
+    }
+
+    @GetMapping("/get/orderlist2")
+    @ApiOperation(value = "주문 메뉴 전체 목록2")
+    public Object getorderlist2(@RequestParam(required = true) int uid, int sid) {
+        ArrayList<Orderlist> orderlistlist = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
+        ResponseEntity<Object> response = null;
         BasicResponse result = new BasicResponse();
         result.status = true;
         result.data = "주문 메뉴 전체 목록 조회 완료";
@@ -55,6 +83,8 @@ public class OrderlistController {
         return response;
     }
 
+
+
     @GetMapping("/get/orderlist/recent")
     @ApiOperation(value = "최신 주문 메뉴")
     public Object getorderlistrecent(@RequestParam(required = true) int uid, int sid) {
@@ -62,7 +92,7 @@ public class OrderlistController {
         Orderlist orderlistrecent = new Orderlist();
         ResponseEntity<Object> response = null;
 
-        Orderlist[] asdf;
+        ArrayList<Orderlist> asdf;
         // orderlistrecent = OrderlistDao.find1OrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
 
         asdf = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
