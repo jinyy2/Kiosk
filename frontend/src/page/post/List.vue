@@ -289,9 +289,6 @@
                       title="아이스크림"
                       @click="seperateCate(2, 7); rightTmp();"
                     ></b-tab>
-
-
-
                     <div class="row overflow container-fluid">
                       <div
                         v-for="menu in menusCateTmp"
@@ -335,6 +332,7 @@
         </div>
       </div>
     </div>
+  <footer>푸터</footer>
   </div>
   
 </template>

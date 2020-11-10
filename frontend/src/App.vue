@@ -34,6 +34,7 @@ export default {
         constants.URL_TYPE.ADMIN.VISITHISTORY,
         constants.URL_TYPE.POST.LIST,
         constants.URL_TYPE.POST.MAIN,
+        constants.URL_TYPE.POST.KIOSKSTART,
       ];
 
       let isHeader = true;

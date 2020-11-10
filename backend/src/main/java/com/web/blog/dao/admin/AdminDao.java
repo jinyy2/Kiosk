@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface AdminDao extends JpaRepository<Visit,Integer> {
 
     Integer countByCurrenttimeBetween(LocalDateTime start, LocalDateTime end);
+    @Query(nativeQuery=true,value="SELECT DATE_FORMAT(currenttime,'%m'),count(*) FROM visit v GROUP BY DATE_FORMAT(currenttime,'%Y%m')")
+    List<Visit> findVisitors();
     List<Visit> findAllByOrderByVidDesc();
     @Query(nativeQuery=true,value="SELECT DATE_FORMAT(currenttime,'%m'),count(*) FROM visit v GROUP BY DATE_FORMAT(currenttime,'%Y%m')")
     List<?> findMonthVisitors();

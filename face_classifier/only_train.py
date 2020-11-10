@@ -17,8 +17,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn_algo='ball_tree', verbose=False):
 
-    X = loadtxt('C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/output2.csv', delimiter=',').tolist()
-    y = loadtxt('C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/output3.csv', dtype=str).tolist()
+    X = loadtxt(base_path+"output2.csv", delimiter=',').tolist()
+    y = loadtxt(base_path+"output3.csv", dtype=str).tolist()
 
     # Loop through each person in the training set
     for class_dir in os.listdir(train_dir):
@@ -36,8 +36,8 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
                 # Add face encoding for current image to the training set
                 X.append(face_recognition.face_encodings(image, known_face_locations=face_bounding_boxes)[0])
                 y.append(class_dir)
-    shutil.rmtree("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train")
-    os.mkdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train")
+    shutil.rmtree(base_path+"train")
+    os.mkdir(base_path+"train")
 
     
     # Determine how many neighbors to use for weighting in the KNN classifier
@@ -63,11 +63,11 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
 
 
 if __name__ == "__main__":
-    base_path = "C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/"
+    base_path = "/home/ubuntu/s03p31b107/face_classifier/"
     flag = False
     # STEP 1: Train the KNN classifier and save it to disk
     # Once the model is trained and saved, you can skip this step next time.
-    classifier = train("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train", model_save_path="trained_knn_model.csv", n_neighbors=1)
+    classifier = train(base_path+"train", model_save_path="trained_knn_model.csv", n_neighbors=1)
 
 
 
