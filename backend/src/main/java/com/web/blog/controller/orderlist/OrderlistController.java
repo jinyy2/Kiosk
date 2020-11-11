@@ -86,8 +86,7 @@ public class OrderlistController {
     @GetMapping("/get/orderlist/recent")
     @ApiOperation(value = "최신 주문 메뉴")
     public Object getorderlistrecent(@RequestParam(required = true) int uid, int sid) {
-        System.out.println("logger - 최신 주문 메뉴");
-        Orderlist orderlistrecent = new Orderlist();
+        // System.out.println("logger - 최신 주문 메뉴");
         ResponseEntity<Object> response = null;
 
         ArrayList<Orderlist> asdf;
@@ -109,16 +108,11 @@ public class OrderlistController {
     @PostMapping("/create/order")
     @ApiOperation(value = "주문 메뉴")
     public Object orderMenu(@Valid @RequestBody final OrderlistRequest[] orderlistRequest) {
-        System.out.println("logger - 주문메뉴: ");
+        // System.out.println("logger - 주문메뉴: ");
         ResponseEntity<Object> response = null;
-        System.out.println(Arrays.toString(orderlistRequest)); //[OrderlistRequest(oid=0, uid=0, sid=1, menuid=498, orderlist=null)]
-
-
-        // Optional<User> user = userDao.findUserByUid(orderlistRequest);
         int orderuid = orderlistRequest[0].getUid(); 
         for (int i = 0; i < orderlistRequest.length; i++) {
             final Orderlist orderlist = new Orderlist();
-            // orderlist.setUid(user.get().getUid());
             orderlist.setUid(orderuid);
             orderlist.setMenuid(orderlistRequest[i].getMenuid());
             orderlist.setSid(orderlistRequest[i].getSid());
@@ -159,8 +153,7 @@ public class OrderlistController {
     @GetMapping("/order/mymenu")
     @ApiOperation(value = "최근 먹은 주문 메뉴")
     public Object orderlistrecent(@RequestParam(required = true) int uid, int sid) {
-        System.out.println("logger - 최신 주문 메뉴");
-
+        // System.out.println("logger - 최신 주문 메뉴");
         List<Orderlist> orderlistlist = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
         List<Branch> menulist = BranchDao.findBranchBySid(sid);
         System.out.println(orderlistlist);

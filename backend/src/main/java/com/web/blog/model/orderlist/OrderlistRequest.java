@@ -2,8 +2,6 @@ package com.web.blog.model.orderlist;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import java.sql.Date;
-
 import javax.validation.Valid;
 
 @Valid

@@ -75,7 +75,7 @@ class FaceClassifier():
             aligned_image = face_alignment_dlib.get_aligned_face(self.predictor, face_image)
 
             filename = now.strftime('%Y%m%d_%H%M%S.%f')[:-3] + '.png'
-            pathname = os.path.join("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture, filename)
+            pathname = os.path.join( base_path+"train/" + args.capture, filename)
 
             tmp += 1
             cv2.imwrite(pathname, aligned_image)
@@ -107,7 +107,7 @@ if __name__ == '__main__':
                     help="resize the frame to process (less time, less accuracy)")
     args = ap.parse_args()
 
-    base_path = "C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/"
+    base_path = "/home/ubuntu/s03p31b107/face_classifier/"
 
     src_file = args.inputfile
     if src_file == "0":
@@ -120,17 +120,18 @@ if __name__ == '__main__':
     frame_width = src.get(cv2.CAP_PROP_FRAME_WIDTH)
     frame_height = src.get(cv2.CAP_PROP_FRAME_HEIGHT)
     frame_rate = src.get(5)
+   
     frames_between_capture = int(round(frame_rate * args.seconds))
 
     ratio = float(args.resize_ratio)
     if ratio != 1.0:
         s = "RESIZE_RATIO: " + args.resize_ratio
         s += " -> %dx%d" % (int(src.get(3) * ratio), int(src.get(4) * ratio))
-
+ 
     num_capture = 0
     if args.capture:
-        if not os.path.isdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture):
-            os.mkdir("C:/Users/multicampus/Desktop/project3/s03p31b107/face_classifier/train/" + args.capture)
+        if not os.path.isdir(base_path +"train/" + args.capture):
+            os.mkdir(base_path+"train/" + args.capture)
 
 
 
@@ -152,10 +153,10 @@ if __name__ == '__main__':
             break
 
         frame_id += 1
-        if frame_id % frames_between_capture != 0:
-            continue
+        # if 10 % 5 != 0:
+        #     continue
 
-        seconds = round(frame_id / frame_rate, 3)
+        seconds = round(5 / 5, 3)
         if args.stop > 0 and seconds > args.stop:
             break
         if seconds < args.skip:
