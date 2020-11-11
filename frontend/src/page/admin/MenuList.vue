@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <p class="mt-3">Current Page: {{ currentPage }}</p>
     <add-menu></add-menu>
     <b-table
       id="my-table"
@@ -8,11 +7,16 @@
       :per-page="perPage"
       :current-page="currentPage"
       :fields="fields"
+      head-variant="dark"
+      text-center
       small
       hover
+      outlined
+      responsive="sm"
     >
-      <template #cell(actions)="row">
-        <b-btn class="btn-margin" id="show-btn" block variant="info" @click="showModal(row.item.menuid)">메뉴 수정</b-btn>
+
+      <template #cell(actions)="row" style="width:200px;">
+        <b-btn class="btn-margin" pill id="show-btn" block variant="info" @click="showModal(row.item.menuid)">메뉴 수정</b-btn>
         <b-btn class="btn-margin" pill variant="outline-danger" @click="deleteMenu(row.item.menuid)">메뉴 삭제</b-btn>
         <!-- <b-btn id="show-btn" @click="test">메뉴 수정</b-btn> -->
       </template>
@@ -63,6 +67,7 @@ export default {
         {
           key: "menuid",
           label: "메뉴 번호",
+          sortable: true
         },
         {
           key: "name",
@@ -75,6 +80,7 @@ export default {
         {
           key: "price",
           label: "메뉴 가격",
+          sortable: true,
         },
         {
           key: "image",
@@ -83,6 +89,8 @@ export default {
         {
           key: "kcal",
           // label:'kcal'
+          sortable: true,
+
         },
         {
           key: "category1",
@@ -101,6 +109,7 @@ export default {
     };
   },
   created() {
+    this.isAdmin()
     // console.log("logger - Create DashBoard");
     this.getMenuList(); //로딩시 메뉴 가져오기
   },
@@ -110,6 +119,25 @@ export default {
     },
   },
   methods: {
+        isAdmin() {
+      const axiosConfig = {
+        headers: {
+          jwtToken: `${this.$cookies.get("Admin-Auth-Token")}`,
+        },
+      };
+      axios
+        .post(`${baseURL}/admin/isAdmin`, "", axiosConfig)
+        .then((res) => {
+          // console.log(res);
+          if (res.data == false) {
+            // this.$router.push({ name: "dashboard" });
+            this.$router.push({ name: "forbidden" });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     showModal(mid) {
       this.getMenuInfo(mid);
       this.$refs.updateMenu.$refs["my-modal"].show();
@@ -155,7 +183,7 @@ export default {
   padding: 20px;
 }
 .btn-margin{
-  margin-bottom:30px;
+  margin:15px 0;
 }
 img {
   width: 100px;

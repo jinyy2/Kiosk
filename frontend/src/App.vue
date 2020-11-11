@@ -34,6 +34,7 @@ export default {
         constants.URL_TYPE.ADMIN.VISITHISTORY,
         constants.URL_TYPE.POST.LIST,
         constants.URL_TYPE.POST.MAIN,
+        constants.URL_TYPE.POST.KIOSKSTART,
       ];
 
       let isHeader = true;
@@ -53,5 +54,12 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Light";
+  src: url('./assets/Light.ttf');
+}
 
+*{
+  font-family: "Light";
+}
 </style>

@@ -3,16 +3,9 @@ package com.web.blog.model.visit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
-import java.time.LocalDateTime;
-
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 
 @Entity
 @Data
@@ -24,5 +17,5 @@ public class Visit {
     private int vid;
     private int uid;
     private String tel;
-    private LocalDateTime currenttime;
+    private String currenttime;
 }

@@ -5,15 +5,15 @@
 import axios from "axios";
 import constants from "@/lib/constants";
 import Chart from "chart.js";
-import planetChartData from "../../chart-data";
+// import planetChartData from "../../chart-data";
 
 const baseURL = constants.baseUrl;
-const ctx = document.getElementById("planet-chart");
+// const ctx = document.getElementById("planet-chart");
 export default {
   name: "Chart",
   data() {
     return {
-      planetChartData: planetChartData,
+      // planetChartData: planetChartData,
       type: "line",
       data: {
         labels: [
@@ -35,28 +35,22 @@ export default {
             // another line graph
             label: "월별 매출액(천원)",
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            backgroundColor: [
-              "rgba(71, 183,132,.5)",
-            ],
+            backgroundColor: ["rgba(71, 183,132,.5)"],
             borderColor: ["#47b784"],
             borderWidth: 3,
           },
           {
             label: "월별 방문자 수",
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            backgroundColor: [
-              "rgba(54,73,93,.5)",
-            ],
-            borderColor: [
-              "#36495d",
-            ],
+            backgroundColor: ["rgba(54,73,93,.5)"],
+            borderColor: ["#36495d"],
             borderWidth: 3,
           },
         ],
       },
       options: {
         responsive: true,
-        lineTension: 1,
+        lineTension: 2,
         scales: {
           yAxes: [
             {
@@ -71,14 +65,16 @@ export default {
     };
   },
   created() {
-    this.getmonthvisitors()
-    this.getMonthIncome()
+    this.getMonthIncome();
+    this.getmonthvisitors();
   },
   mounted() {
-    // this.createChart('planet-chart', this.planetChartData);
+    setTimeout(() => {
+      this.createChart('planet-chart');
+    }, 500);
   },
   methods: {
-    createChart(chartId, chartData) {
+    createChart(chartId) {
       const ctx = document.getElementById(chartId);
 
       const myChart = new Chart(ctx, {
@@ -92,23 +88,22 @@ export default {
         .get(`${baseURL}/admin/getmonthincome`)
         .then((res) => {
           for (let i = 0; i < res.data.length; i++) {
-            this.data.datasets[0].data[res.data[i][0] - 1] = res.data[i][1]*0.001;
+            this.data.datasets[0].data[res.data[i][0] - 1] =
+              res.data[i][1] * 0.001;
           }
-          this.createChart("planet-chart", this.planetChartData);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-        getmonthvisitors() {
+    getmonthvisitors() {
       axios
         .get(`${baseURL}/admin/getmonthvisitors`)
         .then((res) => {
-          // console.log(res)
           for (let i = 0; i < res.data.length; i++) {
             this.data.datasets[1].data[res.data[i][0] - 1] = res.data[i][1];
           }
-          
+          // this.createChart("planet-chart");
         })
         .catch((err) => {
           console.log(err);

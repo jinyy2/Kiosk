@@ -1,6 +1,15 @@
 <template>
   <div class="container2">
-    <b-button id="show-btn" block variant="success" @click="showModal"><h1>메뉴 추가</h1></b-button>
+      <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <b-button id="show-btn" block variant="success" @click="showModal"><h1>메뉴 추가</h1></b-button>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+    
 
     <b-modal ref="my-modal" hide-footer title="새로운 메뉴 추가">
       <div>

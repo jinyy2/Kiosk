@@ -6,6 +6,12 @@
     <div v-if="!isToken">
       <div class="btn" @click="kakaojoin">Login</div>
     </div>
+    <div v-if="isToken">
+       <router-link to="/user/userinfo">
+      <div class="btn">Account</div>
+      </router-link>
+    </div>
+    
   </div>
 </template>
 
@@ -34,40 +40,64 @@ export default {
       this.$store.commit("kakaoIdUpdate", id);
     },
     kakaojoin() {
-      console.log(this.isToken);
       let x = this;
+      // var kakaotempToken = "";
       var a = 0;
       var kakaoToken = "";
       Kakao.Auth.login({
-        success: function (authObj) {
+        success: function(authObj) {
           Kakao.API.request({
             url: "/v2/user/me",
 
-            success: function (res) {
+            success: function(res) {
               x.kakao.uid = res.id;
               x.kakao.name = res.properties.nickname;
-
+              
               axios
                 .post(`${baseURL}/account/kakaologin`, x.kakao)
                 .then((response) => {
+                  console.log(response.data);
+                  console.log("logger - check line");
                   if (response.data != "") {
                     kakaoToken = response.data;
                     x.$cookies.set("Auth-Token", kakaoToken);
+                    console.log("logger - test111");
                     x.$router.go("/");
+                    // x.$router.push({name: "main"}).catch((err) => {
+                    //   console.log(err);
+                    // });
+                   
                   } else {
-                    x.kakaoInfoUpdate(res.id);
-                    x.$router.push({ name: "join" });
+                    alert("얼굴 촬영을 시작하도록 하겠습니다 잠시만 기다려주시길 바랍니다")
+                     console.log("logger - test222");
+                    axios
+                      .get(`${baseURL}/account/takepic`)
+                      .then((response) => {
+                        console.log(response)
+                        console.log('logger - baseURL/accout/takepic axios result')
+                        console.log(response.data);
+
+                        x.kakaoInfoUpdate(res.id);
+                        console.log(res.id);
+                        x.$router.push({ name: "join" });
+                      })
+                      .catch((err) => console.log(err.response));
+                   
                   }
                 })
                 .catch((err) => console.log(err.response));
+              console.log("hh");
             },
           });
         },
 
-        fail: function (error) {
+        fail: function(error) {
           alert(JSON.stringify(error));
         },
       });
+      setTimeout(() => {
+        console.log(a);
+      }, 5);
     },
 
     logout: function () {

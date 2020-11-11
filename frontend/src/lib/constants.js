@@ -1,7 +1,7 @@
 export default {
     TITLE: '키.완.얼',
-    // baseUrl: 'https://k3b107.p.ssafy.io:8080',
-    baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://k3b107.p.ssafy.io:8080',
+    // baseUrl: 'http://localhost:8080',
     LS_KEY: {
         USER_TOKEN: 'userToken',
     },
@@ -21,16 +21,21 @@ export default {
         ADMIN: {
             DASHBOARD: 'dashboard',
             MENULIST: 'menulist',
-            UPDATEMENU: 'updatemenu',
             VISITHISTORY: 'visithistory',
-            ADDMENU: 'addmenu',
+            PURCHASEHISTORY:'purchasehistory'
+            // UPDATEMENU: 'updatemenu',
+            // ADDMENU: 'addmenu',
         },
 
         POST: {
             MAIN: "main",
             LIST: "list",
             KIOSKMAIN: "kisokmain",
+            KIOSKSTART: "kioskstart",
         },
+        ERROR:{
+            FORBIDDEN: 'forbidden',
+        }
     }
 }
 
