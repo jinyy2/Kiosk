@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     checkvisitor() {
+      var x = this;
       tmp();
       function tmp() {
         setTimeout(function () {
@@ -37,7 +38,11 @@ export default {
                     params: { tid: visitorID },
                   })
                   .then((res) => {
-                    // console.log(res.data.data);
+                    if (res.data != "Unknown") {
+                      x.setCookies(res.data)
+                    } else {
+                      x.goKiosk()
+                    }
                   })
                   .catch((err) => {
                     console.log(err.response);
@@ -46,11 +51,17 @@ export default {
                 tmp();
               }
             })
-            .catch((Error) => {
-              console.log(Error);
+            .catch((err) => {
+              console.log(err.response);
             });
         }, 1000);
       }
+    },
+    setCookies (token) {
+      this.$cookies.set("Auth-Token", token);
+      setTimeout(() => {
+        this.goKiosk()
+      }, 300);
     },
     goKiosk() {
       this.$router.push("/list");

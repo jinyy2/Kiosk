@@ -586,7 +586,8 @@ export default {
       tmpBasket = tmpBasket.splice(i, 1);
     },
     okcancel() {
-      this.$router.push({name: "kioskstart"});
+      this.$router.push("/");
+      this.$cookies.remove("Auth-Token");
     },
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

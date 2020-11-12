@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isHeader="isHeader" class="header" />
+   
     <router-view />
   </div>
 </template>
@@ -8,11 +8,11 @@
  <!--<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>-->
 <script>
 import constants from "./lib/constants";
-import Header from "./components/common/Header.vue";
+
 export default {
   name: "App",
   components: {
-    Header,
+    
     // SignupForm,
   },
   created() {
@@ -37,16 +37,14 @@ export default {
         constants.URL_TYPE.POST.KIOSKSTART,
       ];
 
-      let isHeader = true;
-      array.map((path) => {
-        if (url === path) isHeader = false;
-      });
-      this.isHeader = isHeader;
+    
+   
+     
     },
   },
   data: function () {
     return {
-      isHeader: true,
+     
       constants,
     };
   },
