@@ -14,7 +14,35 @@ import constants from "../../lib/constants";
 const baseURL = constants.baseUrl;
 export default {
   name: "KioskStart",
-
+  created() {
+    this.checkvisitor();
+  },
+  methods: {
+    checkvisitor() {
+      tmp()
+      function tmp () {
+        setTimeout(function() {
+          axios
+          .get(baseURL + "/visitor")
+          .then((res) => {
+            if (res.data.object.length != 0) {
+              var visitorID = res.data.object[0].uid
+              axios.get(baseURL + "/tracking/start", { params: { tid: visitorID } })
+              .then(res => {console.log(res.data.data)})
+              .catch((err) => {
+                console.log(err.response);
+              }); 
+            } else {
+              tmp()
+            }
+          })
+          .catch((Error) => {
+            console.log(Error);
+          });  
+        }, 1000);
+        }
+    },
+  }
 };
 </script>
 

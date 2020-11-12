@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.exec.CommandLine;
@@ -23,18 +24,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.blog.dao.checkvisitor.CheckvisitorDao;
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.dao.visit.VisitDao;
 import com.web.blog.jwt.JwtService;
 import com.web.blog.model.BasicResponse;
+import com.web.blog.model.checkvisitor.Checkvisitor;
 import com.web.blog.model.user.User;
 import com.web.blog.model.visit.Visit;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import java.util.*;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -47,6 +53,9 @@ public class AccountController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    CheckvisitorDao checkvisitorDao;
 
     @Autowired
     VisitDao visitDao;
@@ -155,7 +164,7 @@ public class AccountController {
             }
 
             command = new String[2];
-            command[0] = "python3";
+            command[0] = "python";
             command[1] = "/home/ubuntu/s03p31b107/face_classifier/only_train.py";
             try {
                 out = execPython(command);
@@ -193,6 +202,7 @@ public class AccountController {
         try {
             ByteArrayOutputStream out = execPython(command);
             String extact_result = out.toString();
+            System.out.println(extact_result);
             for (int i = 0; i < extact_result.length(); i++) {
                 char c = extact_result.charAt(i);
                 if (c == '\n' || c == '\r') {
@@ -210,7 +220,7 @@ public class AccountController {
             try {
                 out = execPython(command);
                 extact_result = out.toString();
-
+                
                 for (int i = 0; i < extact_result.length(); i++) {
                     char c = extact_result.charAt(i);
                     if (c == '\n' || c == '\r') {
@@ -236,6 +246,10 @@ public class AccountController {
                     result.object = "Unknown";
                 }
 
+                final Checkvisitor addvisitor = new Checkvisitor();
+                addvisitor.setUid(result.object.toString());
+                final Checkvisitor saveOrderlist = checkvisitorDao.save(addvisitor);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -249,6 +263,82 @@ public class AccountController {
         response = new ResponseEntity<>(result, HttpStatus.OK);
         return response;
 
+    }
+
+    @GetMapping("/tracking/start")
+    public ResponseEntity<?> trackingst(@RequestParam(required = true) String tid) {
+        ResponseEntity<?> response = null;
+        BasicResponse result = new BasicResponse();
+        String[] command = new String[3];
+        
+        command[0] = "python3";
+        // command[1] =
+        // "C:\\Users\\multicampus\\Desktop\\project3\\s03p31b107\\face_classifier\\face_recognition_mlp.py";
+        // command[1] = "C:\\do\\face_classifier\\face_recognition_knn.py";
+        command[1] = "/home/woong/s03p31b107/darknet/python/darknet_2.py";
+        command[2] = tid;
+        
+        try {
+            ByteArrayOutputStream out = execPython(command);
+            System.out.println(out);
+            String extact_result = out.toString();
+            for (int i = 0; i < extact_result.length(); i++) {
+                char c = extact_result.charAt(i);
+                if (c == '\n' || c == '\r') {
+                    break;
+                } else if (c != ' ') {
+                }
+            }
+            
+            result.data = extact_result.substring(extact_result.indexOf("$start")+6, extact_result.indexOf("$end")-1);
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return response;
+        
+    }
+    
+    @Transactional
+    @GetMapping("/tracking")
+    @ApiOperation(value = "트래킹")
+    public Object tracking(@RequestParam(required = true) String tid) {
+        checkvisitorDao.deleteByUid(tid);
+        String token = null;
+        try {
+            Optional<User> userOpt = userDao.findUserByUid(Integer.parseInt(tid));
+            if (userOpt.isPresent()) {
+                User tokenuser = new User();
+                tokenuser.setUid(userOpt.get().getUid());
+                tokenuser.setName(userOpt.get().getName());
+                token = jwtService.createLoginToken(tokenuser);
+                System.out.println(token);
+                return new ResponseEntity<>(token, HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/visitor")
+    @ApiOperation(value = "방문자 확인")
+    public Object visitor() {
+
+    List<Checkvisitor> visitorlist = checkvisitorDao.findAll();
+
+    ResponseEntity<Object> response = null;
+    
+    BasicResponse result = new BasicResponse();
+    result.status = true;
+    result.data = "방문자 확인";
+    result.object = visitorlist;
+    response = new ResponseEntity<>(result, HttpStatus.OK);
+    return response;
     }
 
     public static ByteArrayOutputStream execPython(String[] command) throws IOException, InterruptedException {

@@ -87,8 +87,10 @@
           v-model="age"
           type="number"
           required
-          placeholder="Enter age"
+          placeholder="10"
+          min="10" max="100" step="10"
         ></b-form-input>
+      
       </b-form-group>
 
       <!-- 전화번호 -->

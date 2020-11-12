@@ -63,7 +63,7 @@ def train(train_dir, model_save_path="trained_knn_model.csv", n_neighbors=1, knn
 
 
 if __name__ == "__main__":
-    base_path = "C:/s03p31b107/face_classifier/"
+    base_path = "/home/ubuntu/s03p31b107/face_classifier/"
     flag = False
     # STEP 1: Train the KNN classifier and save it to disk
     # Once the model is trained and saved, you can skip this step next time.

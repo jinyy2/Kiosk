@@ -7,8 +7,8 @@
       <div class="btn" @click="kakaojoin">Login</div>
     </div>
     <div v-if="isToken">
-       <router-link to="/user/userinfo">
-      <div class="btn">Account</div>
+       <router-link to="/user/Mypage">
+      <div class="btn">Purchase details</div>
       </router-link>
     </div>
     

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,7 +92,8 @@ public class OrderlistController {
         ResponseEntity<Object> response = null;
 
         ArrayList<Orderlist> asdf;
-        // orderlistrecent = OrderlistDao.find1OrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
+        // orderlistrecent =
+        // OrderlistDao.find1OrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
 
         asdf = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
 
@@ -137,13 +139,16 @@ public class OrderlistController {
     public Object searchOrder(@RequestParam(required = true) int uid, int sid) {
         List<Orderlist> orderlist = OrderlistDao.findOrderlistByUidAndSidOrderByOrderdateDesc(uid, sid);
         List<List<String>> resultlist = new LinkedList<>();
-        for(int i=0; i< orderlist.size(); i++){
-            List<String> sublist =new LinkedList<>();
+        for (int i = 0; i < orderlist.size(); i++) {
+            List<String> sublist = new LinkedList<>();
             sublist.add(orderlist.get(i).getOrderdate());
             sublist.add(StoreDao.test(orderlist.get(i).getSid()));
-            sublist.add(BranchDao.findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid()).getName());
-            sublist.add(BranchDao.findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid()).getImage());
-            sublist.add(Integer.toString(BranchDao.findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid()).getPrice()));
+            sublist.add(BranchDao.findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid())
+                    .getName());
+            sublist.add(BranchDao.findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid())
+                    .getImage());
+            sublist.add(Integer.toString(BranchDao
+                    .findBranchBySidAndMenuid(orderlist.get(i).getSid(), orderlist.get(i).getMenuid()).getPrice()));
             resultlist.add(sublist);
         }
         ResponseEntity<Object> response = null;
@@ -174,4 +179,20 @@ public class OrderlistController {
         System.out.println(ret);
         return ret;
     }
+
+    @GetMapping("/order/hotcurrentmenu")
+    @ApiOperation(value = "시간대 별 인기 메뉴")
+    public ResponseEntity<ArrayList<Orderlist>> hotmenu() {
+
+        ArrayList<Orderlist> list = null;
+        try {
+            list = OrderlistDao.menutimes();
+            System.out.println(list);
+            return new ResponseEntity<ArrayList<Orderlist>>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<ArrayList<Orderlist>>(list, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
