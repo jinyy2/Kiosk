@@ -27,8 +27,8 @@ export default {
           .then((res) => {
             if (res.data.object.length != 0) {
               var visitorID = res.data.object[0].uid
-              axios.get(baseURL + "/tracki
-              ng/start", { params: { tid: visitorID } })
+              console.log(visitorID)
+              axios.get(baseURL + "/tracking/start", { params: { tid: visitorID } })
               .then(res => {console.log(res.data.data)})
               .catch((err) => {
                 console.log(err.response);

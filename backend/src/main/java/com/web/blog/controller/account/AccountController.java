@@ -263,7 +263,8 @@ public class AccountController {
         return response;
 
     }
-
+    
+    @Transactional
     @GetMapping("/tracking/start")
     public ResponseEntity<?> trackingst(@RequestParam(required = true) String tid) {
         ResponseEntity<?> response = null;
@@ -289,6 +290,7 @@ public class AccountController {
                 }
             }
             
+            checkvisitorDao.deleteByUid(tid);
             result.data = extact_result.substring(extact_result.indexOf("$start")+6, extact_result.indexOf("$end")-1);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -299,11 +301,9 @@ public class AccountController {
         
     }
     
-    @Transactional
     @GetMapping("/tracking")
     @ApiOperation(value = "트래킹")
     public Object tracking(@RequestParam(required = true) String tid) {
-        checkvisitorDao.deleteByUid(tid);
         String token = null;
         try {
             Optional<User> userOpt = userDao.findUserByUid(Integer.parseInt(tid));
