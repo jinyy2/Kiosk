@@ -6,5 +6,4 @@ import com.web.blog.model.user.User;
 import com.web.blog.model.visit.Visit;
 
 public interface VisitDao extends JpaRepository<Visit, Integer> {
-    // void savVisit(Visit visit);
 }

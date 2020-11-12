@@ -85,7 +85,7 @@ export default {
         .get(baseURL + "/kiosk/recog")
         .then((Response) => {})
         .catch((Error) => {
-          console.log(Error);
+          console.log(Error.Response);
         });
     },
   },

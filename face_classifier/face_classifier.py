@@ -107,13 +107,16 @@ if __name__ == '__main__':
                     help="resize the frame to process (less time, less accuracy)")
     args = ap.parse_args()
 
-    base_path = "/home/ubuntu/s03p31b107/face_classifier/"
+    base_path = "/home/team7/s03p31b107/face_classifier/"
 
     src_file = args.inputfile
     if src_file == "0":
         src_file = 0
 
-    src = cv2.VideoCapture(src_file, cv2.CAP_DSHOW)
+    src = cv2.VideoCapture(0)
+    src.set(3,320)
+    src.set(4,240)
+    
     if not src.isOpened():
         exit(1)
 

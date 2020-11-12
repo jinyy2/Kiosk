@@ -144,7 +144,7 @@ public class AccountController {
         ResponseEntity<?> response = null;
         String[] command = new String[8];
         command[0] = "python3";
-        command[1] = "/home/ubuntu/s03p31b107/face_classifier/face_classifier.py";
+        command[1] = "/home/team7/s03p31b107/face_classifier/face_classifier.py";
         command[2] = "0";
         command[3] = "-d";
         command[4] = "-S";
@@ -165,7 +165,7 @@ public class AccountController {
 
             command = new String[2];
             command[0] = "python3";
-            command[1] = "/home/ubuntu/s03p31b107/face_classifier/only_train.py";
+            command[1] = "/home/team7/s03p31b107/face_classifier/only_train.py";
             try {
                 out = execPython(command);
                 extact_result = out.toString();
@@ -190,8 +190,8 @@ public class AccountController {
         String[] command = new String[8];
         StringBuffer res = new StringBuffer();
        
-        command[0] = "python";
-        command[1] = "/home/ubuntu/s03p31b107/face_classifier/take_pic.py";
+        command[0] = "python3";
+        command[1] = "/home/team7/s03p31b107/face_classifier/take_pic.py";
         command[2] = "0";
         command[3] = "-d";
         command[4] = "-S";
@@ -215,7 +215,7 @@ public class AccountController {
             command[0] = "python";
             // command[1] =
             // "C:\\Users\\multicampus\\Desktop\\project3\\s03p31b107\\face_classifier\\face_recognition_mlp.py";
-            command[1] = "/home/ubuntu/s03p31b107/face_classifier/face_recognition_knn.py";
+            command[1] = "/home/team7/s03p31b107/face_classifier/face_recognition_knn.py";
             try {
                 out = execPython(command);
                 extact_result = out.toString();
@@ -274,7 +274,7 @@ public class AccountController {
         // command[1] =
         // "C:\\Users\\multicampus\\Desktop\\project3\\s03p31b107\\face_classifier\\face_recognition_mlp.py";
         // command[1] = "C:\\do\\face_classifier\\face_recognition_knn.py";
-        command[1] = "/home/woong/s03p31b107/darknet/python/darknet_2.py";
+        command[1] = "/home/team7/s03p31b107/darknet/python/darknet_2.py";
         command[2] = tid;
         
         try {
