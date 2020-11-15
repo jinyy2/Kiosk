@@ -76,10 +76,29 @@ export default {
 
                     Toast.fire({
                       icon: "error",
-                      title: "얼굴 인식을 실패했습니다!",
+                      title: "얼굴 인식에 실패했습니다!",
                     });
+                  } else {
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      width: 500,
+
+                      position: "top",
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true,
+                      didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                      },
+                    });
+
+                    Toast.fire({
+                      icon: "success",
+                      title: "얼굴 인식에 성공했습니다!",
+                    });
+                    x.$router.push("main");
                   }
-                  x.$router.push("main");
                 })
                 .catch((err) => {
                   console.log(err);
