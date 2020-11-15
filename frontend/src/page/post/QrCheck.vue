@@ -65,6 +65,25 @@ export default {
       self.scans.unshift({ date: +Date.now(), content: content });
       self.UnRegistered();
       self.scanner.stop()
+           const Toast = Swal.mixin({
+              toast: true,
+              width: 500,
+           
+              position: 'top',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'success',
+              title: 'QR 체크인 완료'
+            })
+
       self.$router.push('main')
     });
     Instascan.Camera.getCameras()
