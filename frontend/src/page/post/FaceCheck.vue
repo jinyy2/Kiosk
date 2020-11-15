@@ -1,14 +1,15 @@
 <template>
-  <div style ="text-align: center; " class="p-3 mx-auto">
-    <video  id="video" width="800" height="600" autoplay></video>
-    <canvas
-      id="canvas"
-      width="480"
-      height="360"
-      style="display: none;"
-    ></canvas><br>
+  <div style="text-align: center; " class="p-3 mx-auto">
+    <video id="video" width="800" height="600" autoplay></video>
+    <canvas id="canvas" width="480" height="360" style="display: none;"></canvas
+    ><br />
     <!-- <b-btn @click="start">카메라 켜기</b-btn> -->
-    <button style =" width: 200px; height: 120px; font-size: 80px; margin-left : 10px" @click="snap">촬영</button>
+    <button
+      style=" width: 200px; height: 120px; font-size: 80px; margin-left : 10px"
+      @click="snap"
+    >
+      촬영
+    </button>
   </div>
 </template>
 
@@ -25,7 +26,7 @@ export default {
     };
   },
   mounted() {
-       this.start();
+    this.start();
   },
   methods: {
     start() {
@@ -58,10 +59,27 @@ export default {
               axios
                 .post(baseURL + "/kiosk/recog")
                 .then((response) => {
-                    if(response.data.data =="찾을 수 없는 유저입니다."){
-                      alert('얼굴인식 실패!')
-                    }
-                    x.$router.push('main')     
+                  if (response.data.data == "찾을 수 없는 유저입니다.") {
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      width: 500,
+
+                      position: "top",
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true,
+                      didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                      },
+                    });
+
+                    Toast.fire({
+                      icon: "error",
+                      title: "얼굴 인식을 실패했습니다!",
+                    });
+                  }
+                  x.$router.push("main");
                 })
                 .catch((err) => {
                   console.log(err);
@@ -72,10 +90,28 @@ export default {
             });
         }
       }, 500);
-      
     },
 
     snap() {
+      const Toast = Swal.mixin({
+        toast: true,
+        width: 500,
+
+        position: "top",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "촬영 중입니다",
+      });
+
       for (let i = 0; i < this.howmany; i++) {
         this.tmp(i);
       }
