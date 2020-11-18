@@ -36,7 +36,7 @@
                 </p>
               </div>
             </div>
-            <div
+            <div 
               class="radio-group row justify-content-between px-3 text-center a"
             >
               <div class="col-auto mr-5 mx-1 card-block py-0 text-center radio">
