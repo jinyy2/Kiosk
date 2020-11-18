@@ -7,7 +7,7 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
 import axios from "axios";
 import constants from "../../lib/constants";
